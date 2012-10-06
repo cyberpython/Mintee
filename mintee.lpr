@@ -112,7 +112,7 @@ begin
 
   StdOutFname := '';
 
-  Command := ParamStr(ParamCount);
+  Command := GetOptionValue('c', 'command');
 
   if WriteOutFile then
   begin

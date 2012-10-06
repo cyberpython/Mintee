@@ -63,13 +63,14 @@ var
   ShortOpt          : Boolean;
   WriteOutFile      : Boolean;
   WriteStdOut       : Boolean;
+  ReadStdIn         : Boolean;
   AppendToFiles     : Boolean;
 begin
 
   CaseSensitiveOptions := False;
 
   // quick check parameters
-  ErrorMsg:=CheckOptions('o:a','help out: no-stdout');
+  ErrorMsg:=CheckOptions('c:a','help command: no-stdout');
   if ErrorMsg<>'' then begin
     ShowException(Exception.Create(ErrorMsg));
     Terminate;
@@ -83,10 +84,10 @@ begin
     Exit;
   end;
 
-  if HasOption('o', 'out') then
-     WriteOutFile := True
+  if HasOption('c', 'command') then
+    ReadStdIn := False
   else
-    WriteOutFile := False;
+    ReadStdIn := True;
 
   if HasOption('no-stdout') then
     WriteStdOut := False
@@ -98,17 +99,14 @@ begin
   else
     AppendToFiles := False;
 
-  // check that a command has been specified
+  // check that an output file has been specified
   LongOpt := True;
   ShortOpt := False;
-  if( (LeftStr(ParamStr(ParamCount),1)=OptionChar) OR ((FindOptionIndex('o', ShortOpt)+1)=ParamCount)
-                                            OR ((FindOptionIndex('out', LongOpt)+1)=ParamCount))then
-  begin
-    WriteLn('No command specified!');
-    WriteHelp;
-    Terminate;
-    Exit;
-  end;
+  if( (LeftStr(ParamStr(ParamCount),1)=OptionChar) OR ((FindOptionIndex('c', ShortOpt)+1)=ParamCount)
+                                            OR ((FindOptionIndex('command', LongOpt)+1)=ParamCount))then
+    WriteOutFile := False
+  else
+    WriteOutFile := True;
 
   TotalBytesRead := 0;
 
@@ -118,51 +116,72 @@ begin
 
   if WriteOutFile then
   begin
-       StdOutFname := GetOptionValue('o', 'out');
+       StdOutFname := ParamStr(ParamCount);
        AssignFile(StdOutFile, StdOutFname);
        if AppendToFiles then
          Append(StdOutFile)
        else
          Rewrite(StdOutFile);
   end;
-
-  Proc := TProcess.Create(nil);
-  Proc.CommandLine := Command;
-  Proc.Options := [poUsePipes];
-  Proc.Execute;
-
-  try
+  
+  if ReadStdIn then
   begin
-    while Proc.Running do
+  
+    try
     begin
-         BytesRead := Proc.Output.Read( Buf, READ_BYTES);
-         if(BytesRead>0) then
-         begin
-             Inc(TotalBytesRead, BytesRead);
-             SetString(TmpStr, @Buf, BytesRead);
-             if WriteStdOut then Write(TmpStr);
-             if WriteOutFile then Write(StdOutFile, TmpStr);
-         end
-         else Sleep(100);
+      while not eof(Input) do begin
+        readln(Input, TmpStr);
+        if WriteStdOut then WriteLn(TmpStr);
+        if WriteOutFile then WriteLn(StdOutFile, TmpStr);
+      end;
+
     end;
+    finally
+        if WriteOutFile then CloseFile(StdOutFile);
+    end;
+  
+  end
+  else begin
+  
+    Proc := TProcess.Create(nil);
+    Proc.CommandLine := Command;
+    Proc.Options := [poUsePipes];
+    Proc.Execute;
 
-    repeat
-         BytesRead := Proc.Output.Read( Buf, READ_BYTES);
-         if(BytesRead>0) then
-         begin
-             Inc(TotalBytesRead, BytesRead);
-             SetString(TmpStr, @Buf, BytesRead);
-             if WriteStdOut then Write(TmpStr);
-             if WriteOutFile then Write(StdOutFile, TmpStr);
-         end;
-    until BytesRead <= 0;
+    try
+    begin
+      while Proc.Running do
+      begin
+           BytesRead := Proc.Output.Read( Buf, READ_BYTES);
+           if(BytesRead>0) then
+           begin
+               Inc(TotalBytesRead, BytesRead);
+               SetString(TmpStr, @Buf, BytesRead);
+               if WriteStdOut then Write(TmpStr);
+               if WriteOutFile then Write(StdOutFile, TmpStr);
+           end
+           else Sleep(100);
+      end;
 
+      repeat
+           BytesRead := Proc.Output.Read( Buf, READ_BYTES);
+           if(BytesRead>0) then
+           begin
+               Inc(TotalBytesRead, BytesRead);
+               SetString(TmpStr, @Buf, BytesRead);
+               if WriteStdOut then Write(TmpStr);
+               if WriteOutFile then Write(StdOutFile, TmpStr);
+           end;
+      until BytesRead <= 0;
+
+    end;
+    finally
+        if WriteOutFile then CloseFile(StdOutFile);
+        Proc.Free;
+    end;
+  
   end;
-  finally
-      if WriteOutFile then CloseFile(StdOutFile);
-      Proc.Free;
-  end;
-
+  
   // stop program loop
   Terminate;
 end;
@@ -180,12 +199,12 @@ end;
 
 procedure TMintee.WriteHelp;
 begin
-  WriteLn('Usage: mintee [OPTIONS] <CMD>');
-  WriteLn('Execute command <CMD> and copy the command''s output to a file as well as to the standard output.');
+  WriteLn('Usage: mintee [OPTIONS] [FILE]');
+  WriteLn('Copy standard input to FILE, and also to standard output.');
   WriteLn();
-  WriteLn('  -a, --append            append instead of overwriting files');
-  WriteLn('  -o <file>, --out=<file> copy from the command''s stdout to <file>');
-  WriteLn('  --no-stdout             do not write to stdout');
+  WriteLn('  -a, --append              append instead of overwriting files');
+  WriteLn('  -c <cmd>, --command=<cmd> execute command <cmd> and read from its output instead of stdin');
+  WriteLn('  --no-stdout               do not write to stdout');
   WriteLn();
   WriteLn('Copyright © 2012 Georgios Migdos <cyberpython@gmail.com>');
 end;

@@ -1,6 +1,7 @@
 # Mintee
 
-Mintee is simple program to execute a command and write its output to a file and the standard output.
+Mintee (minimal tee) is simple program to execute a command and write its output to a file and the standard output.
+It kinda works like the Unix tee program, with the exception that only one file can be used to write the output.
 
 ## Build instructions
 
@@ -15,12 +16,13 @@ This should produce the mintee executable.
 
 ## Usage
 
-    mintee [OPTIONS] <CMD>
-    Execute command <CMD> and copy the command's output to a file as well as to the standard output.
+    mintee [OPTIONS] [FILE]
+    Copy standard input to FILE, and also to standard output.');
     
-      -a, --append            append instead of overwriting files
-      -o <file>, --out=<file> copy from the command's stdout to <file>
-      --no-stdout             do not write to stdout
+        -a, --append              append instead of overwriting files');
+        -c <cmd>, --command=<cmd> execute command <cmd> and read from its output instead of stdin');
+        --no-stdout               do not write to stdout');
+    
 
 ## License
 

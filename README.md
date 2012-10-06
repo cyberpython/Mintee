@@ -17,11 +17,11 @@ This should produce the mintee executable.
 ## Usage
 
     mintee [OPTIONS] [FILE]
-    Copy standard input to FILE, and also to standard output.');
+    Copy standard input to FILE, and also to standard output.
     
-        -a, --append              append instead of overwriting files');
-        -c <cmd>, --command=<cmd> execute command <cmd> and read from its output instead of stdin');
-        --no-stdout               do not write to stdout');
+        -a, --append              append instead of overwriting files
+        -c <cmd>, --command=<cmd> execute command <cmd> and read from its output instead of stdin
+        --no-stdout               do not write to stdout
     
 
 ## License

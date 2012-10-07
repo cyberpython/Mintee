@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Mintee by cyberpython</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Mintee</h1>
+        <p>A simple program to execute a command and write its output to a file and the standard output.</p>
+
+        <p class="view"><a href="https://github.com/cyberpython/Mintee">View the Project on GitHub <small>cyberpython/Mintee</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/cyberpython/Mintee/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/cyberpython/Mintee/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/cyberpython/Mintee">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>Mintee</h1>
+
+<p>Mintee (minimal tee) is a simple program to execute a command and write its output to a file and the standard output.
+It kinda works like the Unix tee program, with the exception that only one file can be used to write the output.</p>
+
+<h2>Download</h2>
+
+<p>You can download the latest binary for 32-bit Windows systems from <a href="https://github.com/cyberpython/Mintee/downloads">https://github.com/cyberpython/Mintee/downloads</a></p>
+
+<h2>Build instructions</h2>
+
+<p>The FPC compiler (2.6+) is necessary to compile the source code - it can be downloaded from <a href="http://www.freepascal.org/download.var">http://www.freepascal.org/download.var</a>.</p>
+
+<p>To compile mintee, open a command-line window and change the directory to the one where mintee.lpr is located.
+Then give:</p>
+
+<pre><code>fpc mintee.lpr
+</code></pre>
+
+<p>This should produce the mintee executable.</p>
+
+<h2>Usage</h2>
+
+<pre><code>mintee [OPTIONS] [FILE]
+Copy standard input to FILE, and also to standard output.
+
+    -a, --append              append instead of overwriting files
+    -c &lt;cmd&gt;, --command=&lt;cmd&gt; execute command &lt;cmd&gt; and read from its output instead of stdin
+    --no-stdout               do not write to stdout
+</code></pre>
+
+<h2>License</h2>
+
+<p>Distributed under the terms of the MIT license.
+Copyright © 2012 Georgios Migdos.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/cyberpython">cyberpython</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>

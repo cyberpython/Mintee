@@ -116,6 +116,7 @@ begin
 
   if WriteOutFile then
   begin
+       FileMode := fmShareDenyNone;
        StdOutFname := ParamStr(ParamCount);
        AssignFile(StdOutFile, StdOutFname);
        if AppendToFiles then

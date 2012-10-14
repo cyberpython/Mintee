@@ -3,7 +3,7 @@
 Mintee (minimal tee) is a simple program to execute a command and write its output to a file and the standard output.
 It kinda works like the Unix tee program, with the exception that only one file can be used to write the output.
 
-![Mintee concept of operation](mintee.svg)
+![Mintee concept of operation](https://github.com/cyberpython/Mintee/blob/master/mintee.svg)
 
 ## Build instructions
 

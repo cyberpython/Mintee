@@ -3,6 +3,8 @@
 Mintee (minimal tee) is a simple program to execute a command and write its output to a file and the standard output.
 It kinda works like the Unix tee program, with the exception that only one file can be used to write the output.
 
+![Mintee concept of operation](mintee.svg)
+
 ## Build instructions
 
 The FPC compiler (2.6+) is necessary to compile the source code - it can be downloaded from [http://www.freepascal.org/download.var](http://www.freepascal.org/download.var).
